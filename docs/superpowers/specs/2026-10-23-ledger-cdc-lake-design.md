@@ -1,10 +1,10 @@
 # Ledger CDC Lake: v1 Design
 
-**Date:** 2026-10-23 · **Status:** draft for review
+**Date:** 2026-10-23, revised 2026-10-30 · **Status:** draft for review; stretch project, started only after the data-quality triage agent ships
 
 ## Goal
 
-A portfolio project that replicates a Postgres payments ledger into Iceberg with off-the-shelf OSS, then **proves** the copy is correct and **shows** how it fails and recovers. Built for data-infra applications (TRM Labs, Figma, Netflix, Block, Cohere).
+A learning project that replicates a Postgres payments ledger into Iceberg with off-the-shelf OSS, then **proves** the copy is correct and **shows** how it fails and recovers. Built to practice data infrastructure: CDC, streaming, lakehouse table formats, and operating a pipeline.
 
 The OSS does the moving. The author's own code is the **correctness and operations layer**: a reconciler, failure drills, and a runbook.
 
@@ -19,7 +19,7 @@ The OSS does the moving. The author's own code is the **correctness and operatio
 1. `make up && make demo` on a clean laptop: the stack starts, the generator writes, data lands in Iceberg, and `recon run` exits `0`.
 2. Each of the 4 drills runs end to end with `chaos run <name>` and ends verified (`recon run` exits `0`).
 3. CI is green on every PR: lint, types, and unit tests, plus an integration job with drills 03 and 04.
-4. The README has an architecture diagram, a decisions and tradeoffs section, a failure-modes table linked to `RUNBOOK.md`, and a "what changes at 100×" section.
+4. The README has an architecture diagram and a failure-modes table linked to `RUNBOOK.md`. `DESIGN.md` has the decisions and tradeoffs (at least two options per major decision) and a "what changes at 100×" section; the README links to it.
 5. The author can explain every line of the Flink SQL, the reconciler, and the drills without notes.
 
 ## Architecture
@@ -71,7 +71,7 @@ The generator (plumbing) writes a steady mix of inserts, updates, and deletes at
 | Flink SQL pipeline | `docker-compose.yml`, connector configs |
 | Reconciler | Load generator |
 | Drill scripts and `RUNBOOK.md` | Makefile, CI workflows |
-| README decisions, tradeoffs, and 100× section | Stubs, reviews, mutation tests |
+| `DESIGN.md`: decisions, tradeoffs, and 100× section | Stubs, reviews, mutation tests |
 
 The author writes the unit tests for the reconciler and the drills; the coach mutation-tests them.
 
@@ -153,6 +153,7 @@ ledger-cdc-lake/
 │   └── chaos/               # author
 ├── tests/                   # unit; integration/ needs the stack
 ├── RUNBOOK.md               # author
+├── DESIGN.md                # author
 └── README.md
 ```
 

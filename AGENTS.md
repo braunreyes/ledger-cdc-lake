@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Portfolio project: replicate a Postgres payments ledger into Iceberg with Debezium → Kafka → Flink SQL, then **prove** the copy is correct (reconciler) and **show** how it fails and recovers (failure drills + `RUNBOOK.md`). The OSS moves the data; the learner's code is the correctness and operations layer.
+Learning project (stretch, after the data-quality triage agent ships): replicate a Postgres payments ledger into Iceberg with Debezium → Kafka → Flink SQL, then **prove** the copy is correct (reconciler) and **show** how it fails and recovers (failure drills + `RUNBOOK.md`). The OSS moves the data; the learner's code is the correctness and operations layer.
 
 ## Start Here
 
@@ -10,7 +10,7 @@ Portfolio project: replicate a Postgres payments ledger into Iceberg with Debezi
 
 ## Roles
 
-The human is the **learner**; the agent is the **coach**. The learner is building this to defend it in Staff-level interviews, so every core line must be theirs.
+The human is the **learner**; the agent is the **coach**. The learner is building this to learn data infrastructure at a Staff level, so every core line must be theirs.
 
 - **Core files** (the spec's Ownership table, "Author writes" column): the coach writes the **stub** (signatures, types, docstrings, `raise NotImplementedError`) and a short brief. The learner writes the logic.
 - **Plumbing files** ("Coach writes" column): the coach writes them in full.
@@ -20,7 +20,7 @@ The human is the **learner**; the agent is the **coach**. The learner is buildin
 
 ## Reviews
 
-Review learner code in this order, then end with **one likely interviewer follow-up question** tied to a target role below.
+Review learner code in this order, then end with **one follow-up question a senior engineer would ask**, tied to a skill below.
 
 1. **Trace** a concrete input by hand before calling anything done; state the type after each conversion.
 2. **Contract:** every spec bullet the code touches has a test.
@@ -36,14 +36,15 @@ The learner has no CS degree and has ADHD: explain jargon in plain words with a 
 - **The spec is the scope.** New ideas go in its v2 Backlog, not into the current milestone.
 - **Security:** parameterized SQL only; read-only roles where only `SELECT` is needed; credentials from env vars via `pydantic-settings` and `SecretStr`, never logged or committed.
 
-## Target Roles
+## Skills This Builds
 
-| Role | What this repo gives them |
+| Skill | Where in this repo |
 |---|---|
-| TRM Labs Staff Data Platform (AI Platform) | Operating a pipeline: failure drills, runbook, incident-style recovery |
-| TRM Labs Tech Lead, Data | Kafka, Flink, and CDC design tradeoffs |
-| Figma Data Infrastructure | Streaming ingestion, reliability, data quality |
-| Netflix Data Engineer | Iceberg, Flink, correctness at scale |
+| CDC from Postgres logical replication | Debezium connector config, drill 01 (WAL bloat) |
+| Streaming with Kafka and Flink SQL | The pipeline, drill 02 (schema change) |
+| Lakehouse table formats | Iceberg tables written by Flink, read by pyiceberg + DuckDB |
+| Proving correctness | The reconciler |
+| Operating a pipeline | Failure drills, `RUNBOOK.md`, incident-style recovery |
 
 ## Conventions
 
